@@ -1,0 +1,8 @@
+C:\Users\Alvar\Documents\AlexCorp\myJara\backend\src\main\java\com\myjara\backend\BackendApplication.java
+C:\Users\Alvar\Documents\AlexCorp\myJara\backend\src\main\java\com\myjara\backend\config\SecurityConfig.java
+C:\Users\Alvar\Documents\AlexCorp\myJara\backend\src\main\java\com\myjara\backend\controller\PatientController.java
+C:\Users\Alvar\Documents\AlexCorp\myJara\backend\src\main\java\com\myjara\backend\dto\PatientRequest.java
+C:\Users\Alvar\Documents\AlexCorp\myJara\backend\src\main\java\com\myjara\backend\dto\PatientResponse.java
+C:\Users\Alvar\Documents\AlexCorp\myJara\backend\src\main\java\com\myjara\backend\entity\Patient.java
+C:\Users\Alvar\Documents\AlexCorp\myJara\backend\src\main\java\com\myjara\backend\repository\PatientRepository.java
+C:\Users\Alvar\Documents\AlexCorp\myJara\backend\src\main\java\com\myjara\backend\service\PatientService.java

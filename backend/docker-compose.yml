@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+
+  postgres:
+    image: postgres:16
+    container_name: myjara-postgres
+    environment:
+      POSTGRES_DB: myjara
+      POSTGRES_USER: myjara
+      POSTGRES_PASSWORD: myjara
+      POSTGRES_HOST_AUTH_METHOD: md5
+    ports:
+      - "5433:5432"
+    volumes:
+      - myjara-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myjara"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  myjara-data:
