@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public class EncounterController {
 
     // POST /api/encounters
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN','MEDICO')")
     public ResponseEntity<EncounterResponse> create(
             @Valid @RequestBody EncounterRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)

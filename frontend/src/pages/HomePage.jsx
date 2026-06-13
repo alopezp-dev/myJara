@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
-const modules = [
+const allModules = [
   {
     title: 'Gestión de citas',
     to: '/appointments/new',
+    roles: ['ADMIN', 'MEDICO', 'ENFERMERO', 'ADMINISTRATIVO'],
     icon: (
       <svg viewBox="0 0 48 48" fill="none" className="w-14 h-14" stroke="currentColor" strokeWidth="2">
         <rect x="6" y="10" width="36" height="32" rx="3" />
@@ -19,6 +21,7 @@ const modules = [
   {
     title: 'Pacientes',
     to: '/patients',
+    roles: ['ADMIN', 'MEDICO', 'ENFERMERO', 'ADMINISTRATIVO', 'CELADOR'],
     icon: (
       <svg viewBox="0 0 48 48" fill="none" className="w-14 h-14" stroke="currentColor" strokeWidth="2">
         <circle cx="24" cy="16" r="8" />
@@ -29,6 +32,7 @@ const modules = [
   {
     title: 'Mis tratamientos',
     to: '/treatments',
+    roles: ['ADMIN', 'MEDICO'],
     icon: (
       <svg viewBox="0 0 48 48" fill="none" className="w-14 h-14" stroke="currentColor" strokeWidth="2">
         <rect x="10" y="6" width="28" height="36" rx="2" />
@@ -42,6 +46,7 @@ const modules = [
   {
     title: 'Mis informes',
     to: '/reports',
+    roles: ['ADMIN', 'MEDICO', 'ENFERMERO'],
     icon: (
       <svg viewBox="0 0 48 48" fill="none" className="w-14 h-14" stroke="currentColor" strokeWidth="2">
         <rect x="8" y="4" width="24" height="32" rx="2" />
@@ -55,6 +60,7 @@ const modules = [
   {
     title: 'Historial clínico',
     to: '/patients',
+    roles: ['ADMIN', 'MEDICO', 'ENFERMERO'],
     icon: (
       <svg viewBox="0 0 48 48" fill="none" className="w-14 h-14" stroke="currentColor" strokeWidth="2">
         <path d="M10 8h28v32a4 4 0 01-4 4H14a4 4 0 01-4-4V8z" />
@@ -69,6 +75,7 @@ const modules = [
   {
     title: 'Calendario',
     to: '/calendar',
+    roles: ['ADMIN', 'MEDICO', 'ENFERMERO', 'ADMINISTRATIVO'],
     icon: (
       <svg viewBox="0 0 48 48" fill="none" className="w-14 h-14" stroke="currentColor" strokeWidth="2">
         <rect x="6" y="10" width="36" height="32" rx="3" />
@@ -81,27 +88,70 @@ const modules = [
       </svg>
     )
   },
+  {
+    title: 'Urgencias',
+    to: '/emergency',
+    roles: ['ADMIN', 'MEDICO', 'ENFERMERO', 'CELADOR'],
+    icon: (
+      <svg viewBox="0 0 48 48" fill="none" className="w-14 h-14" stroke="currentColor" strokeWidth="2">
+        <circle cx="24" cy="24" r="18" />
+        <line x1="24" y1="14" x2="24" y2="26" />
+        <circle cx="24" cy="32" r="1.5" fill="currentColor" />
+      </svg>
+    )
+  },
+  {
+    title: 'Administración',
+    to: '/admin',
+    roles: ['ADMIN'],
+    icon: (
+      <svg viewBox="0 0 48 48" fill="none" className="w-14 h-14" stroke="currentColor" strokeWidth="2">
+        <circle cx="24" cy="24" r="6" />
+        <path d="M24 6v4M24 38v4M6 24h4M38 24h4M10.1 10.1l2.83 2.83M35.07 35.07l2.83 2.83M10.1 37.9l2.83-2.83M35.07 12.93l2.83-2.83" />
+      </svg>
+    )
+  },
 ]
 
+const roleLabels = {
+  ADMIN: { label: 'Administrador', color: 'bg-purple-100 text-purple-700' },
+  MEDICO: { label: 'Médico/a', color: 'bg-blue-100 text-blue-700' },
+  ENFERMERO: { label: 'Enfermero/a', color: 'bg-green-100 text-green-700' },
+  ADMINISTRATIVO: { label: 'Administrativo/a', color: 'bg-yellow-100 text-yellow-700' },
+  CELADOR: { label: 'Celador/a', color: 'bg-gray-100 text-gray-700' },
+}
+
 export default function HomePage() {
+  const { user } = useAuth()
+
+  const modules = allModules.filter(m => m.roles.includes(user?.role))
+  const roleInfo = roleLabels[user?.role] || { label: user?.role, color: 'bg-gray-100 text-gray-700' }
+
   return (
     <div>
-      {/* Cabecera del paciente */}
-      <div className="bg-gray-100 border border-gray-200 rounded-xl px-5 py-4 mb-8 flex items-center gap-4">
-        <div className="w-14 h-14 rounded-full bg-green-600 flex items-center justify-center flex-shrink-0">
-          <svg viewBox="0 0 48 48" fill="white" className="w-8 h-8">
-            <circle cx="24" cy="16" r="8" />
-            <path d="M8 40c0-8.837 7.163-16 16-16s16 7.163 16 16" />
-          </svg>
+      {/* Cabecera del usuario */}
+      <div className="bg-gray-100 border border-gray-200 rounded-xl px-5 py-4 mb-8 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 rounded-full bg-green-600 flex items-center justify-center flex-shrink-0">
+            <svg viewBox="0 0 48 48" fill="white" className="w-8 h-8">
+              <circle cx="24" cy="16" r="8" />
+              <path d="M8 40c0-8.837 7.163-16 16-16s16 7.163 16 16" />
+            </svg>
+          </div>
+          <div>
+            <p className="font-bold text-gray-800 text-lg leading-tight uppercase">
+              {user?.fullName}
+            </p>
+            <p className="text-sm text-gray-500">Servicio Extremeño de Salud</p>
+          </div>
         </div>
-        <div>
-          <p className="font-bold text-gray-800 text-lg leading-tight">SISTEMA MYJARA</p>
-          <p className="text-sm text-gray-500">Servicio Extremeño de Salud</p>
-        </div>
+        <span className={`text-xs font-semibold px-3 py-1 rounded-full ${roleInfo.color}`}>
+          {roleInfo.label}
+        </span>
       </div>
 
-      {/* Grid de módulos */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
+      {/* Grid de módulos filtrado por rol */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
         {modules.map(m => (
           <Link
             key={m.to + m.title}
@@ -117,6 +167,13 @@ export default function HomePage() {
           </Link>
         ))}
       </div>
+
+      {modules.length === 0 && (
+        <div className="text-center py-16 text-gray-400">
+          <p className="text-lg">No hay módulos disponibles para tu perfil.</p>
+          <p className="text-sm mt-1">Contacta con el administrador del sistema.</p>
+        </div>
+      )}
     </div>
   )
 }

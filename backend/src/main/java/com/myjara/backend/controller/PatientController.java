@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +19,9 @@ public class PatientController {
 
     private final PatientService patientService;
 
-    // GET /api/patients
+    // Todos los roles pueden ver pacientes
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN','MEDICO','ENFERMERO','ADMINISTRATIVO','CELADOR')")
     public ResponseEntity<List<PatientResponse>> findAll() {
         return ResponseEntity.ok(patientService.findAll());
     }
@@ -36,8 +38,10 @@ public class PatientController {
         return ResponseEntity.ok(patientService.search(term));
     }
 
+    // Solo médicos y admin pueden crear/modificar
     // POST /api/patients
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN','ADMINISTRATIVO')")
     public ResponseEntity<PatientResponse> create(@Valid @RequestBody PatientRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(patientService.create(request));
     }

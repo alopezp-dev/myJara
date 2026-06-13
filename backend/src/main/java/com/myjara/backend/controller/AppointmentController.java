@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -50,6 +51,7 @@ public class AppointmentController {
 
     // POST /api/appointments
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN','MEDICO','ADMINISTRATIVO')")
     public ResponseEntity<AppointmentResponse> create(
             @Valid @RequestBody AppointmentRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)

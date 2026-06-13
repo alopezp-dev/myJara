@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class ClinicalHistoryController {
 
     // POST /api/clinical/conditions
     @PostMapping("/conditions")
+    @PreAuthorize("hasAnyRole('ADMIN','MEDICO')")
     public ResponseEntity<ConditionResponse> addCondition(
             @Valid @RequestBody ConditionRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -72,6 +74,7 @@ public class ClinicalHistoryController {
 
     // POST /api/clinical/notes
     @PostMapping("/notes")
+    @PreAuthorize("hasAnyRole('ADMIN','MEDICO','ENFERMERO')")
     public ResponseEntity<ClinicalNoteResponse> addNote(
             @Valid @RequestBody ClinicalNoteRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
