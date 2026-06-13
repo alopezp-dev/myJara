@@ -9,6 +9,7 @@ import {
 } from '../api/client'
 import Spinner from '../components/common/Spinner'
 import ErrorMessage from '../components/common/ErrorMessage'
+import { getPrescriptionsByPatient } from '../api/client'
 
 function Badge({ text, color = 'gray' }) {
   const colors = {
@@ -78,6 +79,12 @@ export default function PatientDetailPage() {
     queryFn: () => getAllergiesByPatient(id).then(r => r.data),
     enabled: !!patient
   })
+  
+  const { data: prescriptions = [] } = useQuery({
+    queryKey: ['prescriptions', id],
+    queryFn: () => getPrescriptionsByPatient(id).then(r => r.data),
+    enabled: !!patient
+  })
 
   if (isLoading) return <Spinner />
   if (isError) return <ErrorMessage message="No se pudo cargar el paciente." />
@@ -145,6 +152,24 @@ export default function PatientDetailPage() {
                     text={a.severity}
                     color={a.severity === 'SEVERE' ? 'red' : a.severity === 'MODERATE' ? 'yellow' : 'gray'}
                   />
+                </div>
+              ))
+            }
+          </Section>
+
+          {/* Medicación activa */}
+          <Section title={`Medicación activa (${prescriptions.length})`}>
+            {prescriptions.length === 0
+              ? <p className="text-sm text-gray-400">Sin medicación activa.</p>
+              : prescriptions.map(p => (
+                <div key={p.id} className="py-2 border-b border-gray-50 last:border-0">
+                  <div className="flex items-center justify-between mb-0.5">
+                    <p className="text-sm font-medium text-gray-800">{p.medicationName}</p>
+                    <Badge text={p.status} color="blue" />
+                  </div>
+                  <p className="text-xs text-gray-400">{p.dose} · {p.frequency}</p>
+                  {p.duration && <p className="text-xs text-gray-400">Duración: {p.duration}</p>}
+                  <p className="text-xs text-gray-400">Dr/a. {p.professionalName}</p>
                 </div>
               ))
             }

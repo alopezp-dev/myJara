@@ -57,3 +57,15 @@ export const addNote = (data) => client.post('/clinical/notes', data)
 
 export const login = (username, password) =>
   client.post('/auth/login', { username, password })
+
+export const getPrescriptionsByPatient = (id) =>
+  client.get(`/prescriptions/patient/${id}/active`)
+
+export const searchMedications = (term) =>
+  client.get(`/prescriptions/medications/search?term=${term}`)
+
+export const checkInteractions = (patientId, medicationId) =>
+  client.get(`/prescriptions/interactions?patientId=${patientId}&medicationId=${medicationId}`)
+
+export const createPrescription = (data) =>
+  client.post('/prescriptions', data)
