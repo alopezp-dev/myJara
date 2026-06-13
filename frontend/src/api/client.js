@@ -7,6 +7,24 @@ const client = axios.create({
   }
 })
 
+client.interceptors.request.use(config => {
+  const token = localStorage.getItem('token')
+  if (token) config.headers.Authorization = `Bearer ${token}`
+  return config
+})
+
+client.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+      window.location.href = '/login'
+    }
+    return Promise.reject(error)
+  }
+)
+
 // Pacientes
 export const getPatients = () => client.get('/patients')
 export const getPatientById = (id) => client.get(`/patients/${id}`)
@@ -31,3 +49,6 @@ export const getAllergiesByPatient = (id) => client.get(`/clinical/allergies/pat
 export const getNotesByEncounter = (id) => client.get(`/clinical/notes/encounter/${id}`)
 export const addCondition = (data) => client.post('/clinical/conditions', data)
 export const addNote = (data) => client.post('/clinical/notes', data)
+
+export const login = (username, password) =>
+  client.post('/auth/login', { username, password })
