@@ -4,7 +4,7 @@ VALUES (
            '$2a$10$eHuOehxHUvewu07Z8y3theAsrIKXNHWyA8KHiK4xZ0aNz34kUrcKi',
            'Administrador MyJara',
            'ADMIN'
-       );
+       ) ON CONFLICT (username) DO NOTHING;
 
 INSERT INTO users (username, password, full_name, role, professional_id)
 VALUES (
@@ -13,4 +13,4 @@ VALUES (
            'Maria Lopez',
            'MEDICO',
            1
-       );
+       ) ON CONFLICT (username) DO NOTHING;
